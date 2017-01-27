@@ -52,6 +52,13 @@ if 'startrow' in locals():
         # Remove duplicates
         needsgit=set(needsgit)
 
+        # Now process the needsgit list to remove entries with a subsequent
+        # application to the Git course
+        for row in contents[startrow:]:
+            if row[coursecol]=='Version control with Git and GitHub'\
+                and row[emailcol] in needsgit:
+                needsgit.remove(row[emailcol])
+
         # Save email addresses to file
         emails=csv.writer(open('emailgitpromo.csv','w'))
         emails.writerow(list(needsgit))
