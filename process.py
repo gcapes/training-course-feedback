@@ -49,10 +49,11 @@ if 'startrow' in locals():
     if len(needsgit)>0:
         # Remove duplicates
         needsgit=set(needsgit)
-        print('%i people for Git course promotion' % len(needsgit))
 
         # Save email addresses to file
         emails=csv.writer(open('emailgitpromo.csv','w'))
         emails.writerow(list(needsgit))
+        
+    print('%i people for Git course promotion' % len(needsgit))    
     # Overwrite archive with current file
     shutil.copyfile(inputfile,archivefilename)
