@@ -44,7 +44,9 @@ needsgit=[]
 # If there is data to process, startrow should exist
 if 'startrow' in locals():
     for row in contents[startrow:]:
-        if row[vcscol]=='None' and row[coursecol]!='Version control with Git and GitHub':
+        if row[vcscol]=='None' \
+            and row[coursecol]!='Version control with Git and GitHub'\
+            and '@' in row[emailcol]: # Check email address has been entered
             needsgit.append(row[2])
     if len(needsgit)>0:
         # Remove duplicates
@@ -53,7 +55,7 @@ if 'startrow' in locals():
         # Save email addresses to file
         emails=csv.writer(open('emailgitpromo.csv','w'))
         emails.writerow(list(needsgit))
-        
+
     print('%i people for Git course promotion' % len(needsgit))    
     # Overwrite archive with current file
     shutil.copyfile(inputfile,archivefilename)
