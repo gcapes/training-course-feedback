@@ -8,11 +8,15 @@ import os
 import csv
 import shutil
 
-# Accept command line arguments for flexibility of file name and location
-# Check there are two arguments
-assert len(sys.argv)==3, "Two arguments required: <currentfile.csv> <archivefile.csv>"
+# Accept command line arguments for flexibility of file names and locations
+# Check there are three arguments
+assert len(sys.argv)==4, ("Three arguments required: "
+	"<currentresponses.csv> <archive.csv> <gitpromolist.csv>")
 
 inputfile=sys.argv[1]
+archivefilename=sys.argv[2]
+gitpromofile=sys.argv[3]
+
 csvfile=open(inputfile)
 contents=list(csv.reader(csvfile))
 
@@ -27,7 +31,6 @@ assert contents[0][coursecol]=='Which course are you applying to?'
 assert contents[0][vcscol]=='Which version control systems do you use?'
 
 # Check for updates to file
-archivefilename=sys.argv[2]
 if os.path.isfile(archivefilename):
     # Archive file exists
     archivefile=open(archivefilename)
@@ -65,7 +68,7 @@ if 'startrow' in locals():
 print('%i people for Git course promotion' % len(needsgit))    
 
 # Save email addresses to file
-emails=csv.writer(open('emailgitpromo.csv','w'))
+emails=csv.writer(open(gitpromofile,'w'))
 emails.writerow(list(needsgit))
 
 # Overwrite archive with current file
