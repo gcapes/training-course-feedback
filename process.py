@@ -59,10 +59,14 @@ if 'startrow' in locals():
                 and row[emailcol] in needsgit:
                 needsgit.remove(row[emailcol])
 
-        # Save email addresses to file
-        emails=csv.writer(open('emailgitpromo.csv','w'))
-        emails.writerow(list(needsgit))
 
-    print('%i people for Git course promotion' % len(needsgit))    
-    # Overwrite archive with current file
-    shutil.copyfile(inputfile,archivefilename)
+# Whether or not there are any matches, print output and update files.
+# This enables use of a makefile.
+print('%i people for Git course promotion' % len(needsgit))    
+
+# Save email addresses to file
+emails=csv.writer(open('emailgitpromo.csv','w'))
+emails.writerow(list(needsgit))
+
+# Overwrite archive with current file
+shutil.copyfile(inputfile,archivefilename)
