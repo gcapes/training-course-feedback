@@ -1,8 +1,10 @@
-# Script to process applications to moderated Research IT courses
+# Script to process applications to moderated Research IT courses.
+# Instructions:
     # Download the responses to the google forms questionnaire
-    # Call the script with two arguments, the csv file and the archived responses
-    # Script returns a list of people who don't use version control
-    # Email them to advertise Git course
+    # Call the script with three arguments:
+        # python responses.csv archive.csv, emailsforgitpromotion.csv
+    # Script returns a list of people who don't use version control.
+    # Email them to advertise Git course.
 import sys
 import os
 import csv
