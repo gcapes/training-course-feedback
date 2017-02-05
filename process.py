@@ -10,7 +10,6 @@ import os
 import csv
 import shutil
 
-# Accept command line arguments for flexibility of file names and locations
 # Check there are three arguments
 assert len(sys.argv)==4, ("Three arguments required: "
 	"<currentresponses.csv> <archive.csv> <gitpromolist.csv>")
@@ -27,27 +26,34 @@ timecol=0
 emailcol=2
 coursecol=3
 vcscol=8
-assert contents[0][timecol]=="Timestamp"
-assert contents[0][emailcol]=="University Of Manchester email address"
-assert contents[0][coursecol]=='Which course are you applying to?'
-assert contents[0][vcscol]=='Which version control systems do you use?'
+
+def check_headers(contents,timecol,emailcol,coursecol,vcscol):
+    assert contents[0][timecol]=="Timestamp"
+    assert contents[0][emailcol]=="University Of Manchester email address"
+    assert contents[0][coursecol]=='Which course are you applying to?'
+    assert contents[0][vcscol]=='Which version control systems do you use?'
+
+check_headers(contents,timecol,emailcol,coursecol,vcscol)
 
 # Check for updates to file
-if os.path.isfile(archivefilename):
-    # Archive file exists
-    archivefile=open(archivefilename)
-    archivedata=list(csv.reader(archivefile))
-    if len(archivedata)<len(contents):
-        # There is new data to process
+def get_start_row(archivefilename):
+    if os.path.isfile(archivefilename):
+        # Archive file exists
+        archivefile=open(archivefilename)
+        archivedata=list(csv.reader(archivefile))
+        # There is potentially new data to process
         startrow=len(archivedata)
-else:
-    # Archive file doesn't exist, so process all data
-    startrow=0
+    else:
+        # Archive file doesn't exist, so process all data
+        startrow=0
 
-needsgit=[]
+    return startrow 
 
-# If there is data to process, startrow should exist
-if 'startrow' in locals():
+startrow=get_start_row(archivefilename)
+
+# Get list of email addresses for Git course promotion
+def get_emails(responsedata,vcscol,emailcol):
+    needsgit=[]
     for row in contents[startrow:]:
         if row[vcscol]=='None' \
             and row[coursecol]!='Version control with Git and GitHub'\
@@ -63,7 +69,9 @@ if 'startrow' in locals():
             if row[coursecol]=='Version control with Git and GitHub'\
                 and row[emailcol] in needsgit:
                 needsgit.remove(row[emailcol])
+    return needsgit
 
+needsgit=get_emails(contents,vcscol,emailcol)
 
 # Whether or not there are any matches, print output and update files.
 # This enables use of a makefile.
