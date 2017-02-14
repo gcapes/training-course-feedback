@@ -1,13 +1,13 @@
 # Variables kept in a config file.
 include config.mk
 
-# Process training course applications to identify those who don't use
+# Process training course feedback to identify those who don't use
 # version control.
 .PHONY : git
 git : $(GIT_EMAIL)
 
 $(GIT_EMAIL) : $(RESPONSES) $(GIT_SOURCE)
-	$(GIT_EXE) $< archive.csv $(GIT_EMAIL)
+	$(GIT_EXE) $< archive.csv $(GIT_EMAIL) $(GIT_ATTENDANCE)
 
 .PHONY : test-git
 test-git :
