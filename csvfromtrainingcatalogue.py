@@ -12,7 +12,7 @@ def attendance_list(file):
     # Lines 0-7 are headers etc 
     for line in data[8:]:
         # Skip lines which only contain html
-        if '<tr>\n' or '</table>' or '</div>' not in line:
+        if ('<tr>\n' not in line) and ('</table>' not in line) and ('</div>' not in line):
             # html tag for table cell is <td>...</td>
             # Strip start of cell tags
             line = re.sub('<td>','',line)
@@ -25,10 +25,14 @@ def attendance_list(file):
             # Strip non-breaking spaces
             line = re.sub('&nbsp;','',line)
             
+	    # Split string into separate comma-separated items
             linelist=line.split(',')
-            if len(linelist) > 1 :
-                # Split string into separate comma-separated items
-                feedback.append(linelist)
+
+            # Only interested in first 9 columns:
+            # comment column isn't treated well by the above regex,
+            # because it can contain new lines.
+            if len(linelist) >= 10 :
+                feedback.append(linelist[:10])
 
     attendance.close()
           
