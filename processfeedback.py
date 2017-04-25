@@ -31,7 +31,7 @@ def get_start_row(archivefilename):
 
     return startrow 
 
-def get_emails(responsedata,vcscol,emailcol,coursecol,startrow,gitattendance,gitemailcol,gitstatuscol):
+def get_emails(responsedata,vcscol,emailcol,coursecol,startrow,gitattendance,gitemailcol,gitstatuscol,gitpromoarchive):
     needsgit=[]
     statuslist= [x[gitstatuscol] for x in gitattendance]
     emaillist = [x[gitemailcol] for x in gitattendance]
@@ -65,22 +65,33 @@ def get_emails(responsedata,vcscol,emailcol,coursecol,startrow,gitattendance,git
                 index=emaillist.index(email)
                 if statuslist[index] == 'Applied' or 'Attended' or 'Confirmed' or 'Pending':
                     needsgit.remove(email)
+            # Remove person if they have already been emailed once about git course. Don't spam.
+            for sublist in gitpromoarchive:
+                if email in sublist and email in needsgit:
+                    needsgit.remove(email)
+            
     return needsgit
 
 # Run the following commands if executed as a script. Ignore if imported as module.
 if __name__=="__main__":
     # Check for correct number of arguments
-    assert len(sys.argv)==5, ("Four arguments required: "
-    	"<currentresponses.csv> <archive.csv> <gitpromolist.csv>,<gitcourseattendance.xls>")
+    assert len(sys.argv)==6, ("Five arguments required: "
+    	"<currentresponses.csv> <response_archive.csv> <emailgitpromo.csv>,<gitcourseattendance.xls>,<emailgitpromo_archive.csv>")
     
     inputfile=sys.argv[1]
     archivefilename=sys.argv[2]
     gitpromofile=sys.argv[3]
     gitattendancefile=sys.argv[4]
+    gitpromoarchivefile=sys.argv[5]
     
     csvfile=open(inputfile)
     contents=list(csv.reader(csvfile))
     
+    if os.path.isfile(gitpromoarchivefile):
+        gitpromoarchive=list(csv.reader(open(gitpromoarchivefile)))
+    else:
+        gitpromoarchive=[]
+        
     # Check column headers of interest haven't changed
     timecol=0
     emailcol=2
@@ -88,7 +99,7 @@ if __name__=="__main__":
     vcscol=6
     check_headers(contents,timecol,emailcol,coursecol,vcscol)
     
-    # Check for updates to file
+    # Check for new responses by comparing against archive file
     startrow=get_start_row(archivefilename)
     
     # Get git course attendance data
@@ -97,7 +108,7 @@ if __name__=="__main__":
     gitemailcol=6
     
     # Get list of email addresses for Git course promotion
-    needsgit=get_emails(contents,vcscol,emailcol,coursecol,startrow,gitattendance,gitemailcol,gitstatuscol)
+    needsgit=get_emails(contents,vcscol,emailcol,coursecol,startrow,gitattendance,gitemailcol,gitstatuscol,gitpromoarchive)
     
     # Whether or not there are any matches, print output and update files.
     # This enables use of a makefile.
@@ -109,3 +120,8 @@ if __name__=="__main__":
     
     # Overwrite archive with current file
     shutil.copyfile(inputfile,archivefilename)
+    
+    # Append email list to email archive
+    if len(needsgit)>0:
+        emailarchivefile = csv.writer(open(gitpromoarchivefile,'a'))
+        emailarchivefile.writerow(list(needsgit))
