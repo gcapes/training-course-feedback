@@ -1,7 +1,6 @@
 # Strip html from training catalogue's ".xls" file, and convert to csv
 # Only return headers and data.
 
-#import fileinput
 import re
 
 def attendance_list(file):

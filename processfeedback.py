@@ -1,8 +1,9 @@
-# Script to process applications to moderated Research IT courses.
+# Script to process feedback for Research IT courses.
 # Instructions:
     # Download the responses to the google forms questionnaire
     # Call the script with three arguments:
         # python responses.csv archive.csv, emailsforgitpromotion.csv
+        # Note: archive.csv contains responses which have already been processed
     # Script returns a list of people who don't use version control.
     # Email them to advertise Git course.
 import sys
@@ -35,6 +36,7 @@ def get_emails(responsedata,vcscol,emailcol,coursecol,startrow,gitattendance,git
     statuslist= [x[gitstatuscol] for x in gitattendance]
     emaillist = [x[gitemailcol] for x in gitattendance]
     
+    # Identify those who didn't attend the Git course
     for row in responsedata[startrow:]:
         if row[vcscol]=='None' \
             and row[coursecol]!='Version control with Git and GitHub'\
@@ -44,7 +46,8 @@ def get_emails(responsedata,vcscol,emailcol,coursecol,startrow,gitattendance,git
         # Remove duplicates
         needsgit=set(needsgit)
 
-        # Remove entries if feedback shows they have started using VC or attended Git course.
+        # Remove entries if feedback shows they have started using VC
+        # or attended Git course since leaving feedback for non-Git course.
         for row in responsedata[startrow:]:
             course=row[coursecol]
             vcs=row[vcscol]
