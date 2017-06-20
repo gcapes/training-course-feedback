@@ -34,8 +34,9 @@ coursecol=3
 gitattendance=[['','','','','','','scenario7@manchester.ac.uk','','Confirmed']]
 gitstatuscol=8
 gitemailcol=6
+gitpromoarchive=['scenario9@manchester.ac.uk']
 
-actual=processfeedback.get_emails(testdata,vcscol,emailcol,coursecol,0,gitattendance,gitemailcol,gitstatuscol)
+actual=processfeedback.get_emails(testdata,vcscol,emailcol,coursecol,0,gitattendance,gitemailcol,gitstatuscol,gitpromoarchive)
 actual=list(actual)
 actual.sort()
 expected=['scenario1@manchester.ac.uk','scenario1.repeat@manchester.ac.uk','scenario4@manchester.ac.uk','scenario8@manchester.ac.uk']
