@@ -41,6 +41,6 @@ actual=list(actual)
 actual.sort()
 expected=['scenario1@manchester.ac.uk','scenario1.repeat@manchester.ac.uk','scenario4@manchester.ac.uk','scenario8@manchester.ac.uk']
 expected.sort()
-print('Expected: ',expected)
-print('Actual: ', actual)
-assert actual==expected, "Git test failed."
+
+assert actual==expected, "Git test FAILED.\nExpected: %r\nActual: %r" % (expected,actual)
+print('Git test PASSED')
