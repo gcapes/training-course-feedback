@@ -1,6 +1,4 @@
-% Split VCS responses
-vcs = splitMulti(feedback,'vcs');
-
+%% Version Control by faculty
 % Generate summary statistics
 vcsCounts = histcounts(vcs.vcs(vcs.faculty=='EPS'));
 vcsCounts(2,:)=histcounts(vcs.vcs(vcs.faculty=='BMH'));
