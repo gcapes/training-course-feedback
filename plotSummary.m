@@ -16,3 +16,38 @@ legend(string(facultyCats))
 title('VCS usage by faculty')
 ylabel('Probability')
 saveas(gcf,'vcsByFaculty.png')
+
+%% Rating by faculty
+ratingCats = categorical(categories(feedback.rating));
+ratingProb = [];
+for i = 1:length(facultyCats)
+	faculty = facultyCats(i);
+	ratingProbByFac(:,i) = histcounts(feedback.rating(feedback.faculty==faculty),'Normalization','pdf');
+end
+
+% Create categorical array for plotting against
+ratingCats = categorical(categories(feedback.rating));
+	
+% Plot bar chart
+bar(ratingCats,ratingProbByFac)
+legend(string(facultyCats),'Location','northwest')
+title('Course rating by faculty')
+ylabel('Probability')
+saveas(gcf,'ratingByFaculty.png')
+
+%% Rating by course
+courseList = categorical(categories(feedback.course));
+ratingProbByCourse=[];
+for i = 1:length(courseList)
+	course = courseList(i);
+	ratingProbByCourse(:,i)= histcounts(feedback.rating(feedback.course==course),'Normalization','pdf');
+end
+
+% Plot bar chart
+bar(ratingCats,ratingProbByCourse);
+colormap jet
+legend(string(courseList),'Location','NorthWest')
+title('Rating by course')
+ylabel('Probability')
+xlabel('Rating')
+saveas(gcf,'ratingByCourse.png')
