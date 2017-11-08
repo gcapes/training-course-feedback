@@ -1,16 +1,18 @@
 %% Version Control by faculty
 % Generate summary statistics
-vcsCounts = histcounts(vcs.vcs(vcs.faculty=='EPS'));
-vcsCounts(2,:)=histcounts(vcs.vcs(vcs.faculty=='BMH'));
-vcsCounts(3,:)=histcounts(vcs.vcs(vcs.faculty=='Hum'));
-vcsCounts(4,:)=histcounts(vcs.vcs(vcs.faculty=='PSS'));
+facultyCats = categorical(categories(vcs.faculty));
+vcsProb = [];
+for i = 1:length(facultyCats)
+	faculty = facultyCats(i);
+	vcsProb(:,i) = histcounts(vcs.vcs(vcs.faculty==faculty),'Normalization','pdf');
+end
 
-% Transpose for bar plot
-vcsCounts = vcsCounts.';
+% Create categorical array for plotting against
 vcsCats = categorical(categories(vcs.vcs));
 
 % Plot results
-bar(vcsCats,vcsCounts,'stacked')
-legend('EPS','BMH','Hum','PSS')
+bar(vcsCats,vcsProb)
+legend(string(facultyCats))
 title('VCS usage by faculty')
-ylabel('Frequency')
+ylabel('Probability')
+saveas(gcf,'vcsByFaculty.png')
