@@ -1,3 +1,4 @@
+%% Promotion categories
 % Combine categories whose names have changed over time
 oldCats = {'StaffNet Learning and Development page', ...
 	'Staffnet (staffnet.manchester.ac.uk/employment/training/it-systems/research-computing/research-courses/)' ...
@@ -24,5 +25,9 @@ feedback.promotion = promo;
 
 clear promo oldCats shortCats simpleCats
 
-% Rename categories
+%% Faculty categories
 feedback.faculty = renamecats(feedback.faculty,{'BMH','Hum','PSS','EPS'});
+
+%% Course categories
+feedback.course = renamecats(feedback.course, ...
+	{'Make','R','Vis','HPC','LaTeX','Intro Python','MATLAB','Python','Shell','Git'});
