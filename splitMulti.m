@@ -3,8 +3,9 @@
 	% The feedback form allows multiple choice, including free-form 'other' option.
 	% Make a duplicate entry for such responses in order to make a
 	% histogram.
-function outTable = splitMulti(inputTable,field)
+function outTable = splitMulti(inputTable,field,fieldCats)
 	% intputTable.field should be of class string
+	% fieldCats should be a cell array of strings
 	
 	% Identify multiple responses
 	vcs = inputTable.(field);
@@ -26,6 +27,5 @@ function outTable = splitMulti(inputTable,field)
 		individualResponses = vertcat(individualResponses,splitResponse);
 	end
 	outTable = vertcat(outTable,individualResponses);
-	outTable.vcs = categorical(outTable.vcs,{'None','Git','Subversion', ...
-		'Mercurial'});
+	outTable.(field) = categorical(outTable.(field),fieldCats);
 end
