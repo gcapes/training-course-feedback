@@ -31,3 +31,8 @@ feedback.faculty = renamecats(feedback.faculty,{'BMH','Hum','PSS','EPS'});
 %% Course categories
 feedback.course = renamecats(feedback.course, ...
 	{'Make','R','Vis','HPC','LaTeX','Intro Python','MATLAB','Python','Shell','Git'});
+
+%% Software engineering categories
+% Remove content in brackets, so comma splits answers
+feedback.softEng = regexprep((feedback.softEng),' \(.*\)','');
+feedback.softEng = regexprep(feedback.softEng,'.*[Ss]ub-programs','Subprograms');
