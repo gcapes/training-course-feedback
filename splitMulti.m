@@ -1,8 +1,11 @@
-% Duplicate entries which have multiple responses for the specified field
-	% Form allows multiple choice, including free-form 'other' option.
+% Make duplicate entries with categorical values, from input field
+% consisting of a string value representing multiple responses chosen.
+	% The feedback form allows multiple choice, including free-form 'other' option.
 	% Make a duplicate entry for such responses in order to make a
 	% histogram.
 function outTable = splitMulti(inputTable,field)
+	% intputTable.field should be of class string
+	
 	% Identify multiple responses
 	vcs = inputTable.(field);
 	isMultiResponse = ~cellfun(@isempty,regexpi(vcs,','));
@@ -10,8 +13,10 @@ function outTable = splitMulti(inputTable,field)
 	% Make a copy of the input data, excluding mutliple responses
 	outTable = inputTable(~isMultiResponse,:);
 	
-	% Split multiple responses into individual single responses
+	% Save simple responses where only one option was chosen
 	multiResponse = inputTable(isMultiResponse,:);
+	
+	% Split multiple responses into individual single responses
 	individualResponses = table;
 	for row = 1:height(multiResponse)
 		rowData = multiResponse(row,:);
