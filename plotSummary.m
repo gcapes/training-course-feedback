@@ -15,6 +15,7 @@ bar(vcsCats,vcsProb)
 legend(string(facultyCats))
 title('VCS usage by faculty')
 ylabel('Probability')
+xlabel('Software')
 saveas(gcf,'vcsByFaculty.png')
 
 %% Rating by faculty
@@ -33,6 +34,7 @@ bar(ratingCats,ratingProbByFac)
 legend(string(facultyCats),'Location','northwest')
 title('Course rating by faculty')
 ylabel('Probability')
+xlabel('Rating (1 - 5)')
 saveas(gcf,'ratingByFaculty.png')
 
 %% Rating by course
@@ -49,5 +51,5 @@ colormap jet
 legend(string(courseList),'Location','NorthWest')
 title('Rating by course')
 ylabel('Probability')
-xlabel('Rating')
+xlabel('Rating (1 - 5)')
 saveas(gcf,'ratingByCourse.png')
