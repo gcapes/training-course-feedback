@@ -53,3 +53,18 @@ title('Rating by course')
 ylabel('Probability')
 xlabel('Rating (1 - 5)')
 saveas(gcf,'ratingByCourse.png')
+
+%% Software Engineering by faculty
+softEngCats = categorical(categories(softEng.softEng));
+softEngProb = [];
+for i = 1:length(facultyCats)
+	faculty = facultyCats(i);
+	softEngProb(:,i) = histcounts(softEng.softEng(softEng.faculty==faculty),'Normalization','pdf');
+end
+
+bar(softEngCats,softEngProb)
+title('Software Engineering techniques used by faculty')
+legend(string(facultyCats),'Location','NorthWest')
+xlabel('Technique')
+ylabel('Probability')
+saveas(gcf,'softEngByFaculty.png')
