@@ -11,6 +11,7 @@ end
 vcsCats = categorical(categories(vcs.vcs));
 
 % Plot results
+figure()
 bar(vcsCats,vcsProb)
 legend(string(facultyCats))
 title('VCS usage by faculty')
@@ -30,6 +31,7 @@ end
 ratingCats = categorical(categories(feedback.rating));
 	
 % Plot bar chart
+figure()
 bar(ratingCats,ratingProbByFac)
 legend(string(facultyCats),'Location','northwest')
 title('Course rating by faculty')
@@ -46,6 +48,7 @@ for i = 1:length(courseList)
 end
 
 % Plot bar chart
+figure()
 bar(ratingCats,ratingProbByCourse);
 colormap jet
 legend(string(courseList),'Location','NorthWest')
@@ -62,6 +65,7 @@ for i = 1:length(facultyCats)
 	softEngProb(:,i) = histcounts(softEng.softEng(softEng.faculty==faculty),'Normalization','pdf');
 end
 
+figure()
 bar(softEngCats,softEngProb)
 title('Software Engineering techniques used by faculty')
 legend(string(facultyCats),'Location','NorthWest')
