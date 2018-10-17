@@ -72,3 +72,17 @@ legend(string(facultyCats),'Location','NorthWest')
 xlabel('Technique')
 ylabel('Probability')
 saveas(gcf,'softEngByFaculty.png')
+
+%% Course attendance by faculty
+for i = 1:length(courseList)
+    course = courseList(i);
+    facultyProb(i, :) = histcounts(feedback.faculty(feedback.course==course));
+end
+
+figure()
+bar(courseList, facultyProb)
+title('Course attendance by faculty')
+legend(string(facultyCats),'Location','NorthWest')
+xlabel('Course')
+ylabel('Probability')
+saveas(gcf,'CourseAttendanceByFaculty.png')
