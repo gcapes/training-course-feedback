@@ -30,7 +30,7 @@ feedback.faculty = renamecats(feedback.faculty,{'BMH','Hum','PSS','EPS'});
 
 %% Course categories
 feedback.course = renamecats(feedback.course, ...
-	{'Make','R','Vis','HPC','LaTeX','Intro Python','MATLAB','Python','Shell','Git'});
+	{'Make','R','Vis','HPC','LaTeX','Intro Python','MATLAB','Python', 'MATLAB Pro', 'Shell','Git'});
 
 %% Software engineering categories
 % Remove content in brackets, so comma splits answers
