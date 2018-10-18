@@ -29,8 +29,17 @@ clear promo oldCats shortCats simpleCats
 feedback.faculty = renamecats(feedback.faculty,{'BMH','Hum','PSS','EPS'});
 
 %% Course categories
-feedback.course = renamecats(feedback.course, ...
-	{'Make','R','Vis','HPC','LaTeX','Intro Python','MATLAB','Python', 'MATLAB Pro', 'Shell','Git'});
+oldcoursecats = categories(feedback.course);
+newcoursecats = {'Make','R','Vis','HPC','LaTeX','MATLAB','Python','MATLAB Pro','Python Pro', 'Shell','Git'};
+assert(length(oldcoursecats)==length(newcoursecats), 'Wrong number of course category names')
+
+for i = 1:length(oldcoursecats)
+    old = oldcoursecats{i};
+    new = strsplit(newcoursecats{i});
+    new = new{1};
+    assert(contains(old, new, 'IgnoreCase', true), 'Incorrect renaming of course category')
+end
+feedback.course = renamecats(feedback.course, newcoursecats);
 
 %% Software engineering categories
 % Remove content in brackets, so comma splits answers
