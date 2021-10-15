@@ -31,34 +31,34 @@ def version_control_use_by_faculty(data):
     # Split multiple answers into separate rows
     vcs = data.copy()
     # Empty data frame to populate with split answers and merge at the end
-    splitDF = pd.DataFrame(data=None, columns=vcs.columns)
-    dropRows = []
+    split_df = pd.DataFrame(data=None, columns=vcs.columns)
+    drop_rows = []
 
     for i, row in enumerate(vcs.vcs):
-        splitRow = re.split('\s*,\s*', row)
-        nAnswers = len(splitRow)
-        originalRow = list(vcs.iloc[i])
+        split_row = re.split('\s*,\s*', row)
+        n_answers = len(split_row)
+        original_row = list(vcs.iloc[i])
 
-        if nAnswers > 1:
+        if n_answers > 1:
             # Append split up responses to data frame.
-            for answer in splitRow:
-                dropRows.append(i)
-                currentRow = len(splitDF)
+            for answer in split_row:
+                drop_rows.append(i)
+                current_row = len(split_df)
 
                 # Append original row to dataframe
-                splitDF.loc[currentRow] = originalRow
+                split_df.loc[current_row] = original_row
 
                 # Replace vcs in current row with each answer in turn
-                splitDF = splitDF._set_value(currentRow, 'vcs', answer)
+                split_df.at[current_row, 'vcs'] = answer
 
     # Delete original rows
-    vcs.drop(vcs.index[dropRows], inplace=True)
+    vcs.drop(vcs.index[drop_rows], inplace=True)
 
     # Join data frames
-    # new = pd.concat([vcs, splitDF], axis=0, ignore_index=True)
-    new = pd.merge(vcs, splitDF, how='outer')
+    # new = pd.concat([vcs, split_df], axis=0, ignore_index=True)
+    new = pd.merge(vcs, split_df, how='outer')
 
-    assert (new.shape[0] == vcs.shape[0] + splitDF.shape[0])
+    assert (new.shape[0] == vcs.shape[0] + split_df.shape[0])
 
     ## To do:
         # - Test that all the right lines have been dropped (check against MATLAB code)
@@ -107,4 +107,5 @@ def vs_use_by_faculty_take_2(data):
 
 
 data = load_data()
-course_rating_by_faculty(data)
+# course_rating_by_faculty(data)
+version_control_use_by_faculty(data)
