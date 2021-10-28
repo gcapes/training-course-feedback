@@ -72,32 +72,32 @@ def version_control_use_by_faculty(data):
 ## Another attempt using vectorisation and logical indexing
 def vcs_use_by_faculty_take_2(data):
     # Copy original (cleaned) data
-    vcsVec = data.copy()
+    data_copy = data.copy()
 
     # Separate single and multiple answers into new data frames
-    isMulti = vcsVec['vcs'].str.contains(',')
-    vcsMulti = vcsVec[isMulti]
-    vcsSingle = vcsVec[~isMulti]
+    is_multi = data_copy['vcs'].str.contains(',')
+    vcs_multi = data_copy[is_multi]
+    vcs_single = data_copy[~is_multi]
 
     # Split multiple responses into individual single responses
-    splitDF = pd.DataFrame(data=None, columns=vcsVec.columns)
-    vcsIndividual = pd.DataFrame(data=None, columns=vcsVec.columns)
+    split_df = pd.DataFrame(data=None, columns=data_copy.columns)
+    vcs_individual = pd.DataFrame(data=None, columns=data_copy.columns)
 
-    for index, row in enumerate(vcsMulti.vcs):
+    for index, row in enumerate(vcs_multi.vcs):
         answers = re.split('\s*,\s*', row)
-        nAnswers = len(answers)
-        originalRow = list(vcsMulti.iloc[index])
+        n_answers = len(answers)
+        original_row = list(vcs_multi.iloc[index])
 
-        for i in range(0, nAnswers):
-            splitDF.loc[i] = originalRow
+        for i in range(0, n_answers):
+            split_df.loc[i] = original_row
             # Replace multi-responses with individual
-            splitDF.loc[i].vcs = answers[i]
-        vcsIndividual = pd.merge(vcsIndividual, splitDF, how='outer')
-    vcsSeparated = pd.merge(vcsSingle, vcsIndividual, how='outer')
-    assert (new.equals(vcsSeparated))
+            split_df.loc[i].vcs = answers[i]
+        vcs_individual = pd.merge(vcs_individual, split_df, how='outer')
+    vcs_separated = pd.merge(vcs_single, vcs_individual, how='outer')
+    # assert (new.equals(vcs_separated))
 
     # Plot VCS by faculty
-    ax = vcsSeparated.groupby('faculty').vcs.value_counts(normalize=True).unstack().T.sort_index().plot(kind='bar', rot=0,
+    ax = vcs_separated.groupby('faculty').vcs.value_counts(normalize=True).unstack().T.sort_index().plot(kind='bar', rot=0,
                                                                                                         title='Version control software')
     ax.set_xlabel('Software')
     ax.set_ylabel('Probability')
@@ -106,4 +106,5 @@ def vcs_use_by_faculty_take_2(data):
 
 data = load_data()
 # course_rating_by_faculty(data)
-version_control_use_by_faculty(data)
+# version_control_use_by_faculty(data)
+vcs_use_by_faculty_take_2(data)
