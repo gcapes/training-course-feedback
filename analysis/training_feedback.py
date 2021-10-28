@@ -55,14 +55,11 @@ def version_control_use_by_faculty(data):
     vcs.drop(vcs.index[drop_rows], inplace=True)
 
     # Join data frames
-    # new = pd.concat([vcs, split_df], axis=0, ignore_index=True)
     new = pd.merge(vcs, split_df, how='outer')
 
     assert (new.shape[0] == vcs.shape[0] + split_df.shape[0])
 
-    ## To do:
-        # - Test that all the right lines have been dropped (check against MATLAB code)
-        # - Set 'vcs' column as categorical
+    # Reclassify historic free-form answers as None (because that's what they mostly boiled down to)
     new['vcs'].loc[~new['vcs'].isin(['Git', 'None', 'Subversion', 'CVS', 'Mercurial'])] = 'None'
     # Plot VCS by faculty
     ax = new.groupby('faculty').vcs.value_counts(normalize=True).unstack().T.sort_index().plot(kind='bar', rot=0, title='Version control software')
