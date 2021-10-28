@@ -10,13 +10,14 @@ def load_data():
     data = pd.read_csv('feedback.tsv', delimiter='\t', usecols=colsToLoad, names=colHeaders, skiprows=1)
     return data
 
-
-def course_rating_by_faculty(data):
+def clean_data(data):
     data.faculty = pd.Categorical(data.faculty)
-    data.faculty = data.faculty.cat.rename_categories(['BMH','Hum','PSS','EPS'])
+    data.faculty = data.faculty.cat.rename_categories(['BMH', 'Hum', 'PSS', 'EPS'])
     data.rating = pd.Categorical(data.rating)
     data.rating = data.rating.cat.rename_categories([1,2,3,4,5])
+    return data
 
+def course_rating_by_faculty(data):
     # Plot rating by faculty
     # unstack() gives grouped, coloured bars.
     # sort_index() sets the order of the x-axis categories
@@ -94,17 +95,20 @@ def vcs_use_by_faculty_take_2(data):
             split_df.loc[i].vcs = answers[i]
         vcs_individual = pd.merge(vcs_individual, split_df, how='outer')
     vcs_separated = pd.merge(vcs_single, vcs_individual, how='outer')
-    # assert (new.equals(vcs_separated))
 
+    vcs_categories = ['Git', 'None', 'Subversion', 'CVS', 'Mercurial']
+    vcs_separated['vcs'].loc[~vcs_separated['vcs'].isin(vcs_categories)] = 'None'
     # Plot VCS by faculty
     ax = vcs_separated.groupby('faculty').vcs.value_counts(normalize=True).unstack().T.sort_index().plot(kind='bar', rot=0,
                                                                                                         title='Version control software')
     ax.set_xlabel('Software')
     ax.set_ylabel('Probability')
+    ax.legend()
     plt.show()
 
 
 data = load_data()
+data = clean_data(data)
 # course_rating_by_faculty(data)
 # version_control_use_by_faculty(data)
 vcs_use_by_faculty_take_2(data)
