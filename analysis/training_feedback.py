@@ -65,14 +65,14 @@ def version_control_use_by_faculty(data):
         # - Set 'vcs' column as categorical
     new['vcs'].loc[~new['vcs'].isin(['Git', 'None', 'Subversion', 'CVS', 'Mercurial'])] = 'None'
     # Plot VCS by faculty
-    ax = new.groupby('faculty').vcs.value_counts(normalize = True).unstack().T.sort_index().plot(kind = 'bar', rot = 0, title = 'Version control software')
+    ax = new.groupby('faculty').vcs.value_counts(normalize=True).unstack().T.sort_index().plot(kind='bar', rot=0, title='Version control software')
     ax.set_xlabel('Software')
     ax.set_ylabel('Probability')
     plt.show()
 
 
 ## Another attempt using vectorisation and logical indexing
-def vs_use_by_faculty_take_2(data):
+def vcs_use_by_faculty_take_2(data):
     # Copy original (cleaned) data
     vcsVec = data.copy()
 
