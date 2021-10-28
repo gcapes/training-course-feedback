@@ -63,7 +63,7 @@ def version_control_use_by_faculty(data):
     ## To do:
         # - Test that all the right lines have been dropped (check against MATLAB code)
         # - Set 'vcs' column as categorical
-
+    new['vcs'].loc[~new['vcs'].isin(['Git', 'None', 'Subversion', 'CVS', 'Mercurial'])] = 'None'
     # Plot VCS by faculty
     ax = new.groupby('faculty').vcs.value_counts(normalize = True).unstack().T.sort_index().plot(kind = 'bar', rot = 0, title = 'Version control software')
     ax.set_xlabel('Software')
