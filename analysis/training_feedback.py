@@ -65,6 +65,7 @@ def version_control_use_by_faculty(data):
     ax = new.groupby('faculty').vcs.value_counts(normalize=True).unstack().T.sort_index().plot(kind='bar', rot=0, title='Version control software')
     ax.set_xlabel('Software')
     ax.set_ylabel('Usage probability')
+    ax.legend()
     plt.show()
 
 
