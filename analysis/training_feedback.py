@@ -28,50 +28,7 @@ def course_rating_by_faculty(data):
     plt.show()
 
 
-def version_control_use_by_faculty(data):
-    # Split multiple answers into separate rows
-    vcs = data.copy()
-    # Empty data frame to populate with split answers and merge at the end
-    split_df = pd.DataFrame(data=None, columns=vcs.columns)
-    drop_rows = []
-
-    for i, row in enumerate(vcs.vcs):
-        split_row = re.split('\s*,\s*', row)
-        n_answers = len(split_row)
-        original_row = list(vcs.iloc[i])
-
-        if n_answers > 1:
-            # Append split up responses to data frame.
-            for answer in split_row:
-                drop_rows.append(i)
-                current_row = len(split_df)
-
-                # Append original row to dataframe
-                split_df.loc[current_row] = original_row
-
-                # Replace vcs in current row with each answer in turn
-                split_df.at[current_row, 'vcs'] = answer
-
-    # Delete original rows
-    vcs.drop(vcs.index[drop_rows], inplace=True)
-
-    # Join data frames
-    new = pd.merge(vcs, split_df, how='outer')
-
-    assert (new.shape[0] == vcs.shape[0] + split_df.shape[0])
-
-    # Reclassify historic free-form answers as None (because that's what they mostly boiled down to)
-    new['vcs'].loc[~new['vcs'].isin(['Git', 'None', 'Subversion', 'CVS', 'Mercurial'])] = 'None'
-    # Plot VCS by faculty
-    ax = new.groupby('faculty').vcs.value_counts(normalize=True).unstack().T.sort_index().plot(kind='bar', rot=0, title='Version control software')
-    ax.set_xlabel('Software')
-    ax.set_ylabel('Usage probability')
-    ax.legend()
-    plt.show()
-
-
-## Another attempt using vectorisation and logical indexing
-def vcs_use_by_faculty_take_2(data):
+def vcs_use_by_faculty(data):
     # Copy original (cleaned) data
     data_copy = data.copy()
 
@@ -97,6 +54,7 @@ def vcs_use_by_faculty_take_2(data):
     vcs_separated = pd.merge(vcs_single, vcs_individual, how='outer')
 
     vcs_categories = ['Git', 'None', 'Subversion', 'CVS', 'Mercurial']
+    # Reclassify historic free-form answers as None (because that's what they mostly boiled down to)
     vcs_separated['vcs'].loc[~vcs_separated['vcs'].isin(vcs_categories)] = 'None'
     # Plot VCS by faculty
     ax = vcs_separated.groupby('faculty').vcs.value_counts(normalize=True).unstack().T.sort_index().plot(kind='bar', rot=0,
@@ -110,5 +68,4 @@ def vcs_use_by_faculty_take_2(data):
 data = load_data()
 data = clean_data(data)
 # course_rating_by_faculty(data)
-# version_control_use_by_faculty(data)
-vcs_use_by_faculty_take_2(data)
+vcs_use_by_faculty(data)
