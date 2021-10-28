@@ -47,7 +47,7 @@ def download_feedback():
         print('No data found.')
     else:
         with open('feedback.tsv', 'w', newline='') as tsvfile:
-            datawriter = csv.writer(tsvfile, delimiter='	')
+            datawriter = csv.writer(tsvfile, delimiter='\t')
             for row in values:
                 datawriter.writerow(row)
 
