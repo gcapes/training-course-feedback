@@ -17,14 +17,15 @@ def clean_data(data):
     data.rating = data.rating.cat.rename_categories([1,2,3,4,5])
     return data
 
-def course_rating_by_faculty(data):
+def course_rating_groupby(data, groupby):
     # Plot rating by faculty
     # unstack() gives grouped, coloured bars.
     # sort_index() sets the order of the x-axis categories
     # .T gives transpose matrix, so the plot is grouped by rating
-    ax = data.groupby('faculty').rating.value_counts(normalize=True).unstack().T.sort_index().plot(kind='bar', rot=0, title='Rating')
+    ax = data.groupby(groupby).rating.value_counts(normalize=True).unstack().T.sort_index().plot(kind='bar', rot=0, title='Rating')
     ax.set_xlabel('Rating (1-5)')
     ax.set_ylabel('Probability')
+    ax.legend()
     plt.show()
 
 
@@ -67,5 +68,6 @@ def vcs_use_by_faculty(data):
 
 data = load_data()
 data = clean_data(data)
-# course_rating_by_faculty(data)
+course_rating_groupby(data, 'faculty')
+course_rating_groupby(data, 'course')
 vcs_use_by_faculty(data)
