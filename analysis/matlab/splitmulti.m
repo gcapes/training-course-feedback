@@ -3,7 +3,7 @@
 	% The feedback form allows multiple choice, including free-form 'other' option.
 	% Make a duplicate entry for such responses in order to make a
 	% histogram.
-function outTable = splitMulti(inputTable,field,fieldCats)
+function outTable = splitmulti(inputTable,field,fieldCats)
 	% intputTable.field should be of class string
 	% fieldCats should be a cell array of strings
 	
