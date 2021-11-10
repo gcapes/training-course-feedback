@@ -2,6 +2,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import re
 
+pd.options.mode.chained_assignment = None
+
 
 def load_data():
     colHeaders = ['timeStamp','fullName','email','faculty','promo','languages','vcs','softEng','course','rating']
@@ -15,7 +17,29 @@ def clean_data(data):
     data.faculty = data.faculty.cat.rename_categories(['BMH', 'Hum', 'PSS', 'EPS'])
     data.rating = pd.Categorical(data.rating)
     data.rating = data.rating.cat.rename_categories([1,2,3,4,5])
+    data = simple_course_names(data)
     return data
+
+
+def simple_course_names(data):
+    data['course'].loc[data['course'] == 'Automation and Make'] = 'Make'
+    data['course'].loc[data['course'] == 'Data analysis using R'] = 'R'
+    data['course'].loc[data['course'] == 'Introduction to HPC using CSF'] = 'CSF'
+    data['course'].loc[data['course'] == 'Data visualisation and analysis'] = 'Vis'
+    data['course'].loc[data['course'] == 'Introduction to HPC (using CSF and DPSF)'] = 'CSF'
+    data['course'].loc[data['course'] == 'Introduction to LaTeX'] = 'LaTeX'
+    data['course'].loc[data['course'] == 'Introduction to MATLAB'] = 'MATLAB'
+    data['course'].loc[data['course'] == 'Introduction to Mathematica'] = 'Mathematica'
+    data['course'].loc[data['course'] == 'Introduction to Python'] = 'Python'
+    data['course'].loc[data['course'] == 'Introduction to iCSF & CSF'] = 'iCSF'
+    data['course'].loc[data['course'] == 'Introduction to the UNIX shell'] = 'old Shell'
+    data['course'].loc[data['course'] == 'Programming in MATLAB'] = 'old MATLAB'
+    data['course'].loc[data['course'] == 'Programming in Python'] = 'Python pro'
+    data['course'].loc[data['course'] == 'UNIX shell (Linux command line)'] = 'Shell'
+    data['course'].loc[data['course'] == 'Version control with Git and GitHub'] = 'Git'
+
+    return data
+
 
 def course_rating_groupby(data, groupby, filter=[]):
     # Plot rating by faculty
@@ -29,6 +53,7 @@ def course_rating_groupby(data, groupby, filter=[]):
     ax.set_xlabel(groupby)
     ax.set_ylabel('Probability')
     ax.legend(title='Rating', loc=1, fontsize='small', fancybox=True)
+    ax.set_ylim(ymax=1.0)
     plt.tight_layout()
     plt.show()
 
@@ -76,26 +101,5 @@ list_courses = list(sorted(data.course.unique()))
 list_faculties = list(sorted(data.faculty.unique()))
 
 course_rating_groupby(data, 'faculty')
-course_rating_groupby(data, 'course', filter=list_courses[0:5])
+course_rating_groupby(data, 'course', filter=list_courses)
 vcs_use_by_faculty(data)
-
-'''
-    Courses:
-    ['Automation and Make',
-    'Data analysis using R',
-    'Data visualisation and analysis',
-    'Introduction to HPC (using CSF and DPSF)',
-    'Introduction to HPC using CSF',
-    'Introduction to LaTeX',
-    'Introduction to MATLAB',
-    'Introduction to Mathematica',
-    'Introduction to Python',
-    'Introduction to iCSF & CSF',
-    'Introduction to the UNIX shell',
-    'Programming in MATLAB',
-    'Programming in Python',
-    'UNIX shell (Linux command line)',
-    'Version control with Git and GitHub']
-       
-    Faculties: ['BMH', 'EPS', 'Hum', 'PSS']
-'''
