@@ -1,6 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import re
+import streamlit as st
 
 pd.options.mode.chained_assignment = None
 
@@ -55,7 +56,7 @@ def course_rating_groupby(data, groupby, filter=[]):
     ax.legend(title='Rating', loc=1, fontsize='small', fancybox=True)
     ax.set_ylim(ymax=1.0)
     plt.tight_layout()
-    plt.show()
+    st.pyplot()
 
 
 def vcs_use_by_faculty(data):
@@ -92,7 +93,8 @@ def vcs_use_by_faculty(data):
     ax.set_xlabel('Software')
     ax.set_ylabel('Probability')
     ax.legend()
-    plt.show()
+    # plt.show()
+    st.pyplot()
 
 data = load_data()
 data = clean_data(data)
