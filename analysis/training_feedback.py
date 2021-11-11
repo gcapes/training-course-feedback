@@ -112,5 +112,5 @@ list_courses = list(sorted(data.course.unique()))
 list_faculties = list(sorted(data.faculty.unique()))
 
 course_rating_groupby(data, 'faculty')
-course_rating_groupby(data, 'course', filter=list_courses)
+course_rating_groupby(data, 'course', filter=['Make', 'Git', 'Shell', 'LaTeX', 'MATLAB'])
 vcs_use_by_faculty(data)
