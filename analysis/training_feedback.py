@@ -42,7 +42,7 @@ def simple_course_names(data):
     return data
 
 
-def course_rating_groupby(data, groupby, filter=[]):
+def course_rating_groupby(data: pd.DataFrame, groupby: str, filter: list=[]):
     # Plot rating by faculty
     # unstack() gives grouped, coloured bars.
     # sort_index() sets the order of the x-axis categories
