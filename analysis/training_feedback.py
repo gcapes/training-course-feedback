@@ -49,14 +49,23 @@ def course_rating_groupby(data, groupby, filter=[]):
     # .T gives transpose matrix, so the plot is grouped by rating
     if filter:
         data = data.loc[data[groupby].isin(filter)]
-    ax = data.groupby(groupby).rating.value_counts(normalize=True).unstack()\
-        .sort_index().plot.bar(rot=90, stacked=True, title='Rating')
+
+    fig, ax = plt.subplots()
+    bars = data.groupby(groupby).rating.value_counts(normalize=True).unstack().sort_index().T
+    bar_labels = list(bars.columns)
+    rating_labels = list(bars.index)
+    ax.bar(bar_labels, bars.iloc[0], label=rating_labels[0])
+    previous_row = bars.iloc[0]
+    for index, row in bars.iloc[1:].iterrows():
+        ax.bar(bar_labels, row, bottom=previous_row, label=index)
+        previous_row += row
+
     ax.set_xlabel(groupby)
     ax.set_ylabel('Probability')
     ax.legend(title='Rating', loc=1, fontsize='small', fancybox=True)
     ax.set_ylim(ymax=1.0)
     plt.tight_layout()
-    st.pyplot()
+    st.pyplot(fig)
 
 
 def vcs_use_by_faculty(data):
@@ -93,8 +102,8 @@ def vcs_use_by_faculty(data):
     ax.set_xlabel('Software')
     ax.set_ylabel('Probability')
     ax.legend()
-    # plt.show()
-    st.pyplot()
+    plt.show()
+    # st.pyplot()
 
 data = load_data()
 data = clean_data(data)
