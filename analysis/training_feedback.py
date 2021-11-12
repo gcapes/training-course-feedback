@@ -62,6 +62,7 @@ def course_rating_groupby(data: pd.DataFrame, groupby: str, filter: list=[]):
 
     ax.set_xlabel(groupby)
     ax.set_ylabel('Probability')
+    ax.tick_params(axis='x', labelrotation=90)
     ax.legend(title='Rating', loc=1, fontsize='small', fancybox=True)
     ax.set_ylim(ymax=1.0)
     plt.tight_layout()
