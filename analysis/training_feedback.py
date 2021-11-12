@@ -51,7 +51,7 @@ def course_rating_groupby(data: pd.DataFrame, groupby: str, filter: list=[]):
         data = data.loc[data[groupby].isin(filter)]
 
     fig, ax = plt.subplots()
-    bars = data.groupby(groupby).rating.value_counts(normalize=True).unstack().sort_index().T
+    bars = data.groupby(groupby).rating.value_counts(normalize=True).unstack().T.sort_index()
     bar_labels = list(bars.columns)
     rating_labels = list(bars.index)
     ax.bar(bar_labels, bars.iloc[0], label=rating_labels[0])
