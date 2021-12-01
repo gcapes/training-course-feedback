@@ -112,6 +112,10 @@ data = clean_data(data)
 list_courses = list(sorted(data.course.unique()))
 list_faculties = list(sorted(data.faculty.unique()))
 
-course_rating_groupby(data, 'faculty')
-course_rating_groupby(data, 'course', filter=['Make', 'Git', 'Shell', 'LaTeX', 'MATLAB'])
-vcs_use_by_faculty(data)
+group = st.selectbox("Group by", ["course", "faculty"])
+if group == "course":
+    filter = st.multiselect("Choose courses", list_courses)
+elif group == "faculty":
+    filter = st.multiselect("Choose faculties", list_faculties)
+
+# vcs_use_by_faculty(data)
