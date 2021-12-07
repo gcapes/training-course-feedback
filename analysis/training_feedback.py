@@ -19,6 +19,9 @@ def clean_data(data):
     data.rating = pd.Categorical(data.rating)
     data.rating = data.rating.cat.rename_categories([1,2,3,4,5])
     data = simple_course_names(data)
+
+    data.faculty = data.faculty.astype('object')
+    data.rating = data.rating.astype('int64')
     return data
 
 
@@ -51,7 +54,7 @@ def course_rating_groupby(data: pd.DataFrame, groupby: str, filter: list=[]):
         data = data.loc[data[groupby].isin(filter)]
 
     fig, ax = plt.subplots()
-    bars = data.groupby(groupby).rating.value_counts(normalize=True).unstack().dropna().T.sort_index()
+    bars = data.groupby(groupby).rating.value_counts(normalize=True).unstack(fill_value=0).T.sort_index()
     bar_labels = list(bars.columns)
     rating_labels = list(bars.index)
     ax.bar(bar_labels, bars.iloc[0], label=rating_labels[0])
