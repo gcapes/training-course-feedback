@@ -23,21 +23,21 @@ def clean_data(data):
 
 
 def simple_course_names(data):
-    data['course'].loc[data['course'] == 'Automation and Make'] = 'Make'
-    data['course'].loc[data['course'] == 'Data analysis using R'] = 'R'
-    data['course'].loc[data['course'] == 'Introduction to HPC using CSF'] = 'CSF'
-    data['course'].loc[data['course'] == 'Data visualisation and analysis'] = 'Vis'
-    data['course'].loc[data['course'] == 'Introduction to HPC (using CSF and DPSF)'] = 'CSF'
-    data['course'].loc[data['course'] == 'Introduction to LaTeX'] = 'LaTeX'
-    data['course'].loc[data['course'] == 'Introduction to MATLAB'] = 'MATLAB'
-    data['course'].loc[data['course'] == 'Introduction to Mathematica'] = 'Mathematica'
-    data['course'].loc[data['course'] == 'Introduction to Python'] = 'Python'
-    data['course'].loc[data['course'] == 'Introduction to iCSF & CSF'] = 'iCSF'
-    data['course'].loc[data['course'] == 'Introduction to the UNIX shell'] = 'old Shell'
-    data['course'].loc[data['course'] == 'Programming in MATLAB'] = 'old MATLAB'
-    data['course'].loc[data['course'] == 'Programming in Python'] = 'Python pro'
-    data['course'].loc[data['course'] == 'UNIX shell (Linux command line)'] = 'Shell'
-    data['course'].loc[data['course'] == 'Version control with Git and GitHub'] = 'Git'
+    data.loc[data['course']=='Automation and Make', 'course'] = 'Make'
+    data.loc[data['course']=='Data analysis using R', 'course'] = 'R'
+    data.loc[data['course']=='Introduction to HPC using CSF', 'course'] = 'CSF'
+    data.loc[data['course']=='Data visualisation and analysis', 'course'] = 'Vis'
+    data.loc[data['course']=='Introduction to HPC (using CSF and DPSF)', 'course'] = 'CSF'
+    data.loc[data['course']=='Introduction to LaTeX', 'course'] = 'LaTeX'
+    data.loc[data['course']=='Introduction to MATLAB', 'course'] = 'MATLAB'
+    data.loc[data['course']=='Introduction to Mathematica', 'course'] = 'Mathematica'
+    data.loc[data['course']=='Introduction to Python', 'course'] = 'Python'
+    data.loc[data['course']=='Introduction to iCSF & CSF', 'course'] = 'iCSF'
+    data.loc[data['course']=='Introduction to the UNIX shell', 'course'] = 'old Shell'
+    data.loc[data['course']=='Programming in MATLAB', 'course'] = 'old MATLAB'
+    data.loc[data['course']=='Programming in Python', 'course'] = 'Python pro'
+    data.loc[data['course']=='UNIX shell (Linux command line)', 'course'] = 'Shell'
+    data.loc[data['course']=='Version control with Git and GitHub', 'course'] = 'Git'
 
     return data
 
