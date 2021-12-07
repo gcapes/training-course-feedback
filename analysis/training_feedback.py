@@ -119,3 +119,6 @@ elif group == "faculty":
     filter = st.multiselect("Choose faculties", list_faculties)
 
 # vcs_use_by_faculty(data)
+# group = 'faculty'
+# filter = ['Hum']
+course_rating_groupby(data, groupby=group, filter=filter)
