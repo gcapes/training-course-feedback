@@ -7,7 +7,7 @@ include config.mk
 git : $(GIT_EMAIL)
 
 $(GIT_EMAIL) : $(RESPONSES) $(GIT_SOURCE)
-	$(GIT_EXE) $< responses_archive.csv $(GIT_EMAIL) $(GIT_ATTENDANCE) emailgitpromo_archive.csv
+	$(GIT_EXE) $< ../data/feedback_archive.tsv $(GIT_EMAIL) ../data/emailgitpromo_archive.csv
 
 .PHONY : test-git
 test-git :

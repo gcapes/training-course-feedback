@@ -2,8 +2,8 @@
 # Instructions:
 # Download the responses to the google forms questionnaire
 # Call the script with three arguments:
-# python responses.csv archive.csv, emailsforgitpromotion.csv
-# Note: archive.csv contains responses which have already been processed
+# python processfeedback.py ../data/feedback.tsv ../data/feedback_archive.tsv ../data/mailgitpromo.csv ../data/emailgitpromo_archive.csv
+# Note: feedback_archive.tsv contains responses which have already been processed
 # Script returns a list of people who don't use version control.
 # Email them to advertise Git course.
 import sys
