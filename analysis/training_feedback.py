@@ -70,9 +70,11 @@ def course_rating_groupby(data: pd.DataFrame, groupby: str, filter: list=[]):
     st.pyplot(fig)
 
 
-def vcs_use_by_faculty(data):
+def vcs_use_groupby(data, groupby, filter):
     # Copy original (cleaned) data
     data_copy = data.copy()
+    if filter:
+        data_copy = data_copy.loc[data_copy[groupby].isin(filter)]
 
     # Separate single and multiple answers into new data frames
     is_multi = data_copy['vcs'].str.contains(',')
@@ -98,14 +100,26 @@ def vcs_use_by_faculty(data):
     vcs_categories = ['Git', 'None', 'Subversion', 'CVS', 'Mercurial']
     # Reclassify historic free-form answers as None (because that's what they mostly boiled down to)
     vcs_separated['vcs'].loc[~vcs_separated['vcs'].isin(vcs_categories)] = 'None'
-    # Plot VCS by faculty
-    ax = vcs_separated.groupby('faculty').vcs.value_counts(normalize=True).unstack().T.sort_index().plot(kind='bar', rot=0,
-                                                                                                        title='Version control software')
-    ax.set_xlabel('Software')
+
+    # Plot VCS by group
+    fig, ax = plt.subplots()
+    bars = vcs_separated.groupby(groupby, observed=True).vcs.value_counts(normalize=True).unstack(fill_value=0).T.sort_index()
+    bar_labels = list(bars.columns)
+    vcs_labels = list(bars.index)
+    ax.bar(bar_labels, bars.iloc[0], label=vcs_labels[0])
+    previous_row = bars.iloc[0]
+    for index, row in bars.iloc[1:].iterrows():
+        ax.bar(bar_labels, row, bottom=previous_row, label=index)
+        previous_row += row
+
+    ax.set_xlabel(groupby)
     ax.set_ylabel('Probability')
-    ax.legend()
-    plt.show()
-    # st.pyplot()
+    ax.tick_params(axis='x', labelrotation=90)
+    ax.legend(title='VCS', loc=1, fontsize='small', fancybox=True)
+    ax.set_ylim(ymax=1.0)
+    plt.tight_layout()
+    st.pyplot(fig)
+
 
 data = load_data()
 data = clean_data(data)
@@ -123,3 +137,6 @@ elif group == "faculty":
 # group = 'faculty'
 # filter = ['Hum']
 course_rating_groupby(data, groupby=group, filter=filter)
+
+
+vcs_use_groupby(data, group, filter)
