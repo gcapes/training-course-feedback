@@ -1,6 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import re
+import streamlit as st
 
 pd.options.mode.chained_assignment = None
 
@@ -18,44 +19,55 @@ def clean_data(data):
     data.rating = pd.Categorical(data.rating)
     data.rating = data.rating.cat.rename_categories([1,2,3,4,5])
     data = simple_course_names(data)
+
     return data
 
 
 def simple_course_names(data):
-    data['course'].loc[data['course'] == 'Automation and Make'] = 'Make'
-    data['course'].loc[data['course'] == 'Data analysis using R'] = 'R'
-    data['course'].loc[data['course'] == 'Introduction to HPC using CSF'] = 'CSF'
-    data['course'].loc[data['course'] == 'Data visualisation and analysis'] = 'Vis'
-    data['course'].loc[data['course'] == 'Introduction to HPC (using CSF and DPSF)'] = 'CSF'
-    data['course'].loc[data['course'] == 'Introduction to LaTeX'] = 'LaTeX'
-    data['course'].loc[data['course'] == 'Introduction to MATLAB'] = 'MATLAB'
-    data['course'].loc[data['course'] == 'Introduction to Mathematica'] = 'Mathematica'
-    data['course'].loc[data['course'] == 'Introduction to Python'] = 'Python'
-    data['course'].loc[data['course'] == 'Introduction to iCSF & CSF'] = 'iCSF'
-    data['course'].loc[data['course'] == 'Introduction to the UNIX shell'] = 'old Shell'
-    data['course'].loc[data['course'] == 'Programming in MATLAB'] = 'old MATLAB'
-    data['course'].loc[data['course'] == 'Programming in Python'] = 'Python pro'
-    data['course'].loc[data['course'] == 'UNIX shell (Linux command line)'] = 'Shell'
-    data['course'].loc[data['course'] == 'Version control with Git and GitHub'] = 'Git'
+    data.loc[data['course']=='Automation and Make', 'course'] = 'Make'
+    data.loc[data['course']=='Data analysis using R', 'course'] = 'R'
+    data.loc[data['course']=='Introduction to HPC using CSF', 'course'] = 'CSF'
+    data.loc[data['course']=='Data visualisation and analysis', 'course'] = 'Vis'
+    data.loc[data['course']=='Introduction to HPC (using CSF and DPSF)', 'course'] = 'CSF'
+    data.loc[data['course']=='Introduction to LaTeX', 'course'] = 'LaTeX'
+    data.loc[data['course']=='Introduction to MATLAB', 'course'] = 'MATLAB'
+    data.loc[data['course']=='Introduction to Mathematica', 'course'] = 'Mathematica'
+    data.loc[data['course']=='Introduction to Python', 'course'] = 'Python'
+    data.loc[data['course']=='Introduction to iCSF & CSF', 'course'] = 'iCSF'
+    data.loc[data['course']=='Introduction to the UNIX shell', 'course'] = 'old Shell'
+    data.loc[data['course']=='Programming in MATLAB', 'course'] = 'old MATLAB'
+    data.loc[data['course']=='Programming in Python', 'course'] = 'Python pro'
+    data.loc[data['course']=='UNIX shell (Linux command line)', 'course'] = 'Shell'
+    data.loc[data['course']=='Version control with Git and GitHub', 'course'] = 'Git'
 
     return data
 
 
-def course_rating_groupby(data, groupby, filter=[]):
+def course_rating_groupby(data: pd.DataFrame, groupby: str, filter: list=[]):
     # Plot rating by faculty
     # unstack() gives grouped, coloured bars.
     # sort_index() sets the order of the x-axis categories
     # .T gives transpose matrix, so the plot is grouped by rating
     if filter:
         data = data.loc[data[groupby].isin(filter)]
-    ax = data.groupby(groupby).rating.value_counts(normalize=True).unstack()\
-        .sort_index().plot.bar(rot=90, stacked=True, title='Rating')
+
+    fig, ax = plt.subplots()
+    bars = data.groupby(groupby, observed=True).rating.value_counts(normalize=True).unstack(fill_value=0).T.sort_index()
+    bar_labels = list(bars.columns)
+    rating_labels = list(bars.index)
+    ax.bar(bar_labels, bars.iloc[0], label=rating_labels[0])
+    previous_row = bars.iloc[0]
+    for index, row in bars.iloc[1:].iterrows():
+        ax.bar(bar_labels, row, bottom=previous_row, label=index)
+        previous_row += row
+
     ax.set_xlabel(groupby)
     ax.set_ylabel('Probability')
+    ax.tick_params(axis='x', labelrotation=90)
     ax.legend(title='Rating', loc=1, fontsize='small', fancybox=True)
     ax.set_ylim(ymax=1.0)
     plt.tight_layout()
-    plt.show()
+    st.pyplot(fig)
 
 
 def vcs_use_by_faculty(data):
@@ -93,6 +105,7 @@ def vcs_use_by_faculty(data):
     ax.set_ylabel('Probability')
     ax.legend()
     plt.show()
+    # st.pyplot()
 
 data = load_data()
 data = clean_data(data)
@@ -100,6 +113,13 @@ data = clean_data(data)
 list_courses = list(sorted(data.course.unique()))
 list_faculties = list(sorted(data.faculty.unique()))
 
-course_rating_groupby(data, 'faculty')
-course_rating_groupby(data, 'course', filter=list_courses)
-vcs_use_by_faculty(data)
+group = st.selectbox("Group by", ["course", "faculty"])
+if group == "course":
+    filter = st.multiselect("Choose courses", list_courses)
+elif group == "faculty":
+    filter = st.multiselect("Choose faculties", list_faculties)
+
+# vcs_use_by_faculty(data)
+# group = 'faculty'
+# filter = ['Hum']
+course_rating_groupby(data, groupby=group, filter=filter)
