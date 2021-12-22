@@ -127,16 +127,16 @@ data = clean_data(data)
 list_courses = list(sorted(data.course.unique()))
 list_faculties = list(sorted(data.faculty.unique()))
 
+st.write("""# Training course feedback""")
+
 group = st.selectbox("Group by", ["course", "faculty"])
 if group == "course":
     filter = st.multiselect("Choose courses", list_courses)
 elif group == "faculty":
     filter = st.multiselect("Choose faculties", list_faculties)
 
-# vcs_use_by_faculty(data)
-# group = 'faculty'
-# filter = ['Hum']
+st.write("""## Course rating""")
 course_rating_groupby(data, groupby=group, filter=filter)
 
-
+st.write("""## VCS use""")
 vcs_use_groupby(data, group, filter)
