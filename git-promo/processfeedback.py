@@ -93,11 +93,6 @@ if __name__ == "__main__":
     # Check for new responses by comparing against archive file
     startrow = get_start_row(archivefilename)
 
-    # Get git course attendance data
-    # gitattendance=csvfromtrainingcatalogue.attendance_list(gitattendancefile)
-    # gitstatuscol=8
-    # gitemailcol=6
-
     # Get list of email addresses for Git course promotion
     needsgit = get_emails(contents, vcscol, emailcol, coursecol, startrow, gitpromoarchive)
 
