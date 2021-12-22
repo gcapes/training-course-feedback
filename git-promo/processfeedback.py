@@ -68,7 +68,8 @@ def get_emails(responsedata, vcscol, emailcol, coursecol, startrow, gitpromoarch
 if __name__ == "__main__":
     # Check for correct number of arguments
     assert len(sys.argv) == 5, ("Four arguments required: "
-                                "<currentresponses.csv> <response_archive.csv> <emailgitpromo.csv>,<emailgitpromo_archive.csv>")
+                                "<currentresponses.csv> <response_archive.csv> <emailgitpromo.csv>,"
+                                "<emailgitpromo_archive.csv>")
 
     inputfile = sys.argv[1]
     archivefilename = sys.argv[2]
