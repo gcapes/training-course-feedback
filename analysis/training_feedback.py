@@ -2,9 +2,12 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import re
 import streamlit as st
+import os
 
 pd.options.mode.chained_assignment = None
 
+script_dir = os.path.dirname(os.path.abspath(__file__))
+os.chdir(script_dir)
 
 def load_data():
     colHeaders = ['timeStamp','fullName','email','faculty','promo','languages','vcs','softEng','course','rating']
