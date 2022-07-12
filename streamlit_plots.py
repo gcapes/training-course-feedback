@@ -6,14 +6,11 @@ import os
 
 pd.options.mode.chained_assignment = None
 
-script_dir = os.path.dirname(os.path.abspath(__file__))
-os.chdir(script_dir)
-
 def load_data():
     colHeaders = ['timeStamp','fullName','email','faculty','promo','languages','vcs','softEng','course','rating']
     colsToLoad = list(range(0,9))
     colsToLoad.append(13)
-    data = pd.read_csv('../data/feedback.tsv', delimiter='\t', usecols=colsToLoad, names=colHeaders, skiprows=1)
+    data = pd.read_csv('data/feedback.tsv', delimiter='\t', usecols=colsToLoad, names=colHeaders, skiprows=1)
     return data
 
 def clean_data(data):
