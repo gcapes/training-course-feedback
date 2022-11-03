@@ -6,3 +6,4 @@ token.json
 **/venv/
 data/
 **/.idea/
+credentials.json
